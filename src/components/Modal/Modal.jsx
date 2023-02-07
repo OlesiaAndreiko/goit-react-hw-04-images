@@ -1,49 +1,40 @@
 import PropTypes from 'prop-types';
 import { Overlay, ThumbImage, ModalImage } from './Modal.styled';
-import { Component } from 'react';
+import { useEffect } from 'react';
 
-export class Modal extends Component {
-  static propTypes = {
-    onClose: PropTypes.func.isRequired,
-    largeImageURL: PropTypes.string.isRequired,
-    tags: PropTypes.string.isRequired,
-  };
-
-  componentDidMount() {
-    window.addEventListener('keydown', this.onEscapeClose);
-  }
-
-  componentWillUnmount() {
-    window.removeEventListener('keydown', this.onEscapeClose);
-  }
-
-  onEscapeClose = event => {
-    const { onClose } = this.props;
-    if (event.code === 'Escape') {
-      onClose();
-    }
-  };
-
-  onBackdropClose = event => {
-    const { onClose } = this.props;
+export const Modal = ({ onClose, largeImageURL, tags }) => {
+  
+  const onBackdropClose = event => {
     if (event.target === event.currentTarget) {
       onClose();
     }
   };
 
-  render() {
-    const { largeImageURL, tags } = this.props;
+  useEffect(() => {
+    const onEscapeClose = event => {
+      if (event.code === 'Escape') {
+        onClose();
+      }
+    };
 
-    return (
-      <Overlay>
-        <ThumbImage>
-          <ModalImage
-            src={largeImageURL}
-            alt={tags}
-            onClick={this.onBackdropClose}
-          />
-        </ThumbImage>
-      </Overlay>
-    );
-  }
-}
+    window.addEventListener('keydown', onEscapeClose);
+    
+    return () => {
+      window.removeEventListener('keydown', onEscapeClose);
+    };
+  }, [onClose]);
+
+  return (
+    <Overlay>
+      <ThumbImage>
+        <ModalImage src={largeImageURL} alt={tags} onClick={onBackdropClose} />
+      </ThumbImage>
+    </Overlay>
+  );
+};
+
+Modal.propTypes = {
+  onClose: PropTypes.func.isRequired,
+  largeImageURL: PropTypes.string.isRequired,
+  tags: PropTypes.string.isRequired,
+};
