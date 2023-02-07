@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-export const SearchForm = styled.form`
+export const SearchForm = styled.form.attrs({ autoComplete: 'off' })`
   display: flex;
   align-items: center;
   width: 100%;
@@ -9,7 +9,7 @@ export const SearchForm = styled.form`
   border-radius: 3px;
   overflow: hidden;
 `;
-export const SearchFormButton = styled.button`
+export const SearchFormButton = styled.button.attrs({ type: 'submit' })`
   display: flex;
   align-items: center;
   justify-content: center;
@@ -27,7 +27,10 @@ export const SearchFormButton = styled.button`
   }
 `;
 
-export const SearchFormInput = styled.input`
+export const SearchFormInput = styled.input.attrs({
+  type: 'text',
+  placeholder: 'Search images and photos'
+})`
   display: inline-block;
   width: 100%;
   height: 30px;

@@ -1,4 +1,4 @@
-import { Component } from 'react';
+// import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { ImSearch } from 'react-icons/im';
 import {
@@ -7,53 +7,28 @@ import {
   SearchFormInput,
 } from './Searchform.styled';
 
-export class Searchform extends Component {
-static propTypes = {
-  onSearch: PropTypes.func.isRequired,
-}
-
-  state = {
-    value: '',
-  };
-
-  handleChange = event => {
-    const { value } = event.target;
-    this.setState({ value });
-  };
-
-  handleSubmit = event => {
+export const Searchform = ({ onSearch }) => {
+  const handleSubmit = event => {
     event.preventDefault();
 
-    const { onSearch } = this.props;
-    const { value } = this.state;
-    onSearch(value);
-    
-    this.reset();
+    const { query } = event.target.elements;
+    onSearch(query.value);
+
+    event.target.reset();
   };
 
-  reset = () => {
-    this.setState({
-      value: '',
-    });
-  };
+  return (
+    <SearchForm onSubmit={handleSubmit}>
+      <SearchFormButton>
+        <ImSearch size={20} />
+      </SearchFormButton>
+      <SearchFormInput
+        name="query"
+      />
+    </SearchForm>
+  );
+};
 
-  render() {
-    const { value } = this.state;
-    return (
-      <SearchForm onSubmit={this.handleSubmit}>
-        <SearchFormButton type="submit">
-          <ImSearch size={20} />
-        </SearchFormButton>
-        <SearchFormInput
-          type="text"
-          name="query"
-          value={value}
-          onChange={this.handleChange}
-          autocomplete="off"
-          autoFocus
-          placeholder="Search images and photos"
-        />
-      </SearchForm>
-    );
-  }
-}
+Searchform.propTypes = {
+  onSearch: PropTypes.func.isRequired,
+};
