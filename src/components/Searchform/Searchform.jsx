@@ -1,6 +1,8 @@
 // import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { ImSearch } from 'react-icons/im';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import {
   SearchForm,
   SearchFormButton,
@@ -14,6 +16,10 @@ export const Searchform = ({ onSearch }) => {
     const { query } = event.target.elements;
     onSearch(query.value);
 
+    if (!query.value) {
+      toast.warn('Please enter the search term!');
+    }
+
     event.target.reset();
   };
 
@@ -22,9 +28,7 @@ export const Searchform = ({ onSearch }) => {
       <SearchFormButton>
         <ImSearch size={20} />
       </SearchFormButton>
-      <SearchFormInput
-        name="query"
-      />
+      <SearchFormInput name="query" />
     </SearchForm>
   );
 };

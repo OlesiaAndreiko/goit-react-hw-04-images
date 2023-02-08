@@ -1,5 +1,7 @@
 import { fetchImages } from '../sevices/fetchImages.service';
 import { useState, useEffect } from 'react';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { ImageGallery } from './ImageGallery/ImageGallery';
 import { Searchbar } from './Searchbar/Searchbar';
 import { ImageSkeleton } from './ImageSkeleton/ImageSkeleton';
@@ -28,17 +30,26 @@ export const App = () => {
       try {
         const data = await fetchImages({ q: query, page });
         setGallary(prevGallary => [...prevGallary, ...data.hits]);
-
+        if (!data.totalHits) {
+          toast.error(
+            'Sorry, there are no images matching your search query. Please try again.'
+          );
+          return;
+        }
         if (page < Math.ceil(data.totalHits / perPage)) {
           setIsShowBtn(true);
         } else {
           setIsShowBtn(false);
+          toast.info(
+            `You've reached the end of search results. Begin a new search!`
+          );
           return;
         }
       } catch (error) {
         setError(
           'Sorry, there was a negative effect. Please refresh the page.'
         );
+        toast.error(error);
       } finally {
         setIsLoading(false);
       }
@@ -71,6 +82,8 @@ export const App = () => {
       {error && <ErrorMessage error={error} />}
 
       {isShowBtn && <ButtonLoadMore onClick={changePage} />}
+
+      <ToastContainer theme="colored" />
     </>
   );
 };
