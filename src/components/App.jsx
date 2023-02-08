@@ -19,12 +19,6 @@ export const App = () => {
   const perPage = 12;
 
   useEffect(() => {
-    if (gallary.length) {
-      setGallary(gallary);
-    }
-  }, [gallary]);
-
-  useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true);
       try {
