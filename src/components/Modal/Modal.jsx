@@ -6,6 +6,8 @@ export const Modal = ({ onClose, largeImageURL, tags }) => {
   
   const onBackdropClose = event => {
     if (event.target === event.currentTarget) {
+      console.log(event.target)
+      console.log(event.currentTarget)
       onClose();
     }
   };
@@ -25,9 +27,9 @@ export const Modal = ({ onClose, largeImageURL, tags }) => {
   }, [onClose]);
 
   return (
-    <Overlay>
+    <Overlay onClick={onBackdropClose}>
       <ThumbImage>
-        <ModalImage src={largeImageURL} alt={tags} onClick={onBackdropClose}/>
+        <ModalImage src={largeImageURL} alt={tags}/>
       </ThumbImage>
     </Overlay>
   );

@@ -18,6 +18,6 @@ export const ThumbImage = styled.div`
 `;
 export const ModalImage = styled.img`
   display: block;
-  width: 100%;
+  width: 50%;
   height: auto;
 `;
