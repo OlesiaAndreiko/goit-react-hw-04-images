@@ -18,7 +18,7 @@ export const Modal = ({ onClose, largeImageURL, tags }) => {
     };
 
     window.addEventListener('keydown', onEscapeClose);
-    
+
     return () => {
       window.removeEventListener('keydown', onEscapeClose);
     };
@@ -27,7 +27,7 @@ export const Modal = ({ onClose, largeImageURL, tags }) => {
   return (
     <Overlay>
       <ThumbImage>
-        <ModalImage src={largeImageURL} alt={tags} onClick={onBackdropClose} />
+        <ModalImage src={largeImageURL} alt={tags} onClick={onBackdropClose}/>
       </ThumbImage>
     </Overlay>
   );
@@ -38,3 +38,5 @@ Modal.propTypes = {
   largeImageURL: PropTypes.string.isRequired,
   tags: PropTypes.string.isRequired,
 };
+
+

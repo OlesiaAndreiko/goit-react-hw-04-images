@@ -1,83 +1,76 @@
 import { fetchImages } from '../sevices/fetchImages.service';
-import { Component } from 'react';
+import { useState, useEffect } from 'react';
 import { ImageGallery } from './ImageGallery/ImageGallery';
 import { Searchbar } from './Searchbar/Searchbar';
 import { ImageSkeleton } from './ImageSkeleton/ImageSkeleton';
 import { ErrorMessage } from './ErrorMessage/ErrorMessage';
 import { ButtonLoadMore } from './ButtonLoadMore/ButtonLoadMore';
 
-export class App extends Component {
-  state = {
-    q: '',
-    gallary: [],
-    isLoading: false,
-    error: null,
-    page: 1,
-    isShow: false,
-  };
+export const App = () => {
+  const [query, setQuery] = useState('');
+  const [gallary, setGallary] = useState([]);
+  const [page, setPage] = useState(1);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isShowBtn, setIsShowBtn] = useState(false);
+  const [error, setError] = useState(null);
 
-  perPage = 12;
+  const perPage = 12;
 
-  componentDidMount() {
-    if (this.state.gallary.length) {
-      this.makeGallary();
+  useEffect(() => {
+    if (gallary.length) {
+      setGallary(gallary);
     }
-  }
+  }, [gallary]);
 
-  componentDidUpdate(_, prevState) {
-    const { q, page } = this.state;
-    if (q && (prevState.q !== q || prevState.page !== page)) {
-      this.fetchData();
+  useEffect(() => {
+    const fetchData = async () => {
+      setIsLoading(true);
+      try {
+        const data = await fetchImages({ q: query, page });
+        setGallary(prevGallary => [...prevGallary, ...data.hits]);
+
+        if (page < Math.ceil(data.totalHits / perPage)) {
+          setIsShowBtn(true);
+        } else {
+          setIsShowBtn(false);
+          return;
+        }
+      } catch (error) {
+        setError(
+          'Sorry, there was a negative effect. Please refresh the page.'
+        );
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    if (query) {
+      fetchData({ q: query, page });
     }
-  }
+  }, [query, page]);
 
-  fetchData = async () => {
-    const { q, page } = this.state;
-    this.setState({ isLoading: true });
-    try {
-      const data = await fetchImages({ q, page });
-      this.setState(prevState => ({
-        gallary: [...prevState.gallary, ...data.hits],
-        isShow: (page < Math.ceil(data.totalHits / this.perPage)),
-      }));
-    } catch (error) {
-      // console.log(error);
-      this.setState({
-        error: 'Sorry, there was a negative effect. Please refresh the page.',
-      });
-    } finally {
-      this.setState({ isLoading: false });
-    }
+  const getQuery = searchWord => {
+    setQuery(searchWord);
+    setGallary([]);
+    setPage(1);
+    setError(null);
   };
 
-  makeGallary = array => {
-    this.setState({ gallary: array });
+  const changePage = () => {
+    setPage(prevPage => prevPage + 1);
   };
 
-  getQuery = searchWord => {
-    this.setState({ q: searchWord, gallary: [], page: 1, error: null });
-  };
+  return (
+    <>
+      <Searchbar onSearch={getQuery} />
 
-  changePage = () => {
-    this.setState(prevState => ({
-      page: prevState.page + 1,
-    }));
-  };
+      {gallary.length > 0 && <ImageGallery gallary={gallary} />}
 
-  render() {
-    const { gallary, isLoading, error, isShow } = this.state;
-    return (
-      <>
-        <Searchbar onSearch={this.getQuery} />
+      {isLoading && <ImageSkeleton />}
 
-        {gallary.length > 0 && <ImageGallery gallary={this.state.gallary} />}
+      {error && <ErrorMessage error={error} />}
 
-        {isLoading && <ImageSkeleton />}
-
-        {error && <ErrorMessage error={error} />}
-
-        {isShow && <ButtonLoadMore onClick={this.changePage} />}
-      </>
-    );
-  }
-}
+      {isShowBtn && <ButtonLoadMore onClick={changePage} />}
+    </>
+  );
+};
