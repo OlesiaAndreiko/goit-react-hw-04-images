@@ -54,12 +54,18 @@ export const App = () => {
     }
   }, [query, page]);
 
-  const getQuery = searchWord => {    
-    setQuery(searchWord);
+  const getQuery = searchWord => {
     setGallary([]);
     setPage(1);
-    setError(null);
     setIsShowBtn(false);
+    setError(null);
+
+    if (!searchWord) {
+      toast.warn('Please enter the search term!');
+      setQuery('');
+      return;
+    }
+    setQuery(searchWord);
   };
 
   const changePage = () => {
