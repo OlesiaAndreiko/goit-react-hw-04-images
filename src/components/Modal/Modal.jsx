@@ -5,12 +5,10 @@ import { useEffect } from 'react';
 export const Modal = ({ onClose, largeImageURL, tags }) => {
   
   const onBackdropClose = event => {
-    if (event.target === event.currentTarget) {
-      console.log(event.target)
-      console.log(event.currentTarget)
+    if (event.target === event.currentTarget) {     
       onClose();
     }
-  };
+     };
 
   useEffect(() => {
     const onEscapeClose = event => {

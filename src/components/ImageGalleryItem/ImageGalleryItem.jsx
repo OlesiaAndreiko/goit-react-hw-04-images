@@ -11,8 +11,8 @@ export const ImageGalleryItem = ({image: { id, tags, webformatURL, largeImageURL
   };
 
   return (
-    <GalleryItem key={id} onClick={toggleModal}>
-      <GalleryItemImage src={webformatURL} alt={tags} />
+    <GalleryItem key={id} >
+      <GalleryItemImage src={webformatURL} alt={tags} onClick={toggleModal}/>
       {isOpenModal && (
         <Modal
           largeImageURL={largeImageURL}
@@ -21,6 +21,7 @@ export const ImageGalleryItem = ({image: { id, tags, webformatURL, largeImageURL
         />
       )}
     </GalleryItem>
+
   );
 };
 
