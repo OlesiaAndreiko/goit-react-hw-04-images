@@ -54,7 +54,7 @@ export const App = () => {
     }
   }, [query, page]);
 
-  const getQuery = searchWord => {
+  const getQuery = searchWord => {    
     setQuery(searchWord);
     setGallary([]);
     setPage(1);
