@@ -26,7 +26,7 @@ export const Searchform = ({ onSearch }) => {
   return (
     <SearchForm onSubmit={handleSubmit}>
       <SearchFormButton>
-        <ImSearch size={20} />
+        <ImSearch size={20}/>
       </SearchFormButton>
       <SearchFormInput name="query" />
     </SearchForm>

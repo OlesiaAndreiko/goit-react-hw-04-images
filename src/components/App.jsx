@@ -59,6 +59,7 @@ export const App = () => {
     setGallary([]);
     setPage(1);
     setError(null);
+    setIsShowBtn(false);
   };
 
   const changePage = () => {
